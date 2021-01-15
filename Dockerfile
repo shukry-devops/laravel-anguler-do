@@ -1,3 +1,16 @@
+### STAGE 1: BUILD ####
+FROM node:10.16.3-alpine AS build
+WORKDIR /usr/src/app
+COPY ./frontend/package.json ./
+#COPY ./frontend/package-lock.json ./
+# To handle 'not get uid/gid'
+RUN npm config set unsafe-perm true
+RUN npm install -g @angular/cli
+RUN npm install
+COPY ./frontend .
+RUN npm run build-prod
+RUN ls -la /usr/src/app/dist 
+
 FROM php:7.2-apache
 
 # Install system dependencies
